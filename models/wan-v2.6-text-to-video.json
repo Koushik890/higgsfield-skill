@@ -1,0 +1,78 @@
+{
+  "id": "wan-v2.6-text-to-video",
+  "name": "Wan 2.6",
+  "endpoint": "wan/v2.6/text-to-video",
+  "category": "text2video",
+  "summary": "Generates multi-shot videos from text or images with native sound and optional video references.",
+  "docs": "https://open.higgsfield.ai/models/wan/v2.6/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/wan/v2.6/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "720p",
+    "multi_shots": false,
+    "prompt_extend": false
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Wan 2.6 Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 10000000,
+        "minimum": -1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "enum": [
+          5,
+          10,
+          15
+        ],
+        "type": "integer",
+        "title": "Duration",
+        "default": 5
+      },
+      "audio_url": {
+        "type": "string",
+        "title": "Audio URL",
+        "format": "uri"
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "multi_shots": {
+        "type": "boolean",
+        "default": false
+      },
+      "prompt_extend": {
+        "type": "boolean",
+        "default": false
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.250"
+}

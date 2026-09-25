@@ -1,0 +1,119 @@
+{
+  "id": "recraft-v4.1-utility-text-to-image",
+  "name": "Recraft V4.1 Utility",
+  "endpoint": "recraft/v4.1/utility/text-to-image",
+  "category": "text2image",
+  "summary": "Recraft V4.1 Utility generates images from text prompts with customizable resolution, aspect ratio, output format, and color options including background and palette colors. This variant focuses on utility features for precise control over image attributes.",
+  "docs": "https://open.higgsfield.ai/models/recraft/v4.1/utility/text-to-image/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/recraft/v4.1/utility/text-to-image/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "resolution": "1k",
+    "aspect_ratio": "1:1",
+    "output_format": "jpg"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Recraft V4.1 Utility Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "colors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "rgb"
+          ],
+          "properties": {
+            "rgb": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "maximum": 255,
+                "minimum": 0
+              },
+              "maxItems": 3,
+              "minItems": 3
+            }
+          }
+        },
+        "title": "Colors"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "maxLength": 10000,
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "resolution": {
+        "enum": [
+          "1k"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "1k"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "1:1",
+          "2:1",
+          "1:2",
+          "3:2",
+          "2:3",
+          "4:3",
+          "3:4",
+          "5:4",
+          "4:5",
+          "6:10",
+          "14:10",
+          "10:14",
+          "16:9",
+          "9:16"
+        ],
+        "type": "string",
+        "title": "Aspect ratio",
+        "default": "1:1"
+      },
+      "output_format": {
+        "enum": [
+          "jpg",
+          "png",
+          "webp"
+        ],
+        "type": "string",
+        "title": "Output format",
+        "default": "jpg"
+      },
+      "background_color": {
+        "type": "object",
+        "title": "Background color",
+        "required": [
+          "rgb"
+        ],
+        "properties": {
+          "rgb": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 3,
+            "minItems": 3
+          }
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "api",
+  "sample_usd": "0.035"
+}

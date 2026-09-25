@@ -1,0 +1,98 @@
+{
+  "id": "higgsfield-ai-soul-standard",
+  "name": "Soul Standard",
+  "endpoint": "higgsfield-ai/soul/standard",
+  "category": "text2image",
+  "summary": "Generates fashion and lifestyle photos from text, with style presets for editorial and social content.",
+  "docs": "https://open.higgsfield.ai/models/higgsfield-ai/soul/standard/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/higgsfield-ai/soul/standard/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "seed": null,
+    "prompt": "A cinematic scene at sunset",
+    "style_id": null,
+    "batch_size": 1,
+    "resolution": "720p",
+    "aspect_ratio": "4:3",
+    "enhance_prompt": true,
+    "style_strength": 1
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Soul Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "title": "Seed",
+        "default": null,
+        "maximum": 1000000,
+        "minimum": 1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "style_id": {
+        "type": "string",
+        "title": "Soul Style",
+        "format": "uuid",
+        "default": null
+      },
+      "batch_size": {
+        "enum": [
+          1,
+          4
+        ],
+        "type": "integer",
+        "title": "Result images",
+        "default": 1
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "720p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "9:16",
+          "16:9",
+          "4:3",
+          "3:4",
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "4:3"
+      },
+      "enhance_prompt": {
+        "type": "boolean",
+        "title": "Enhance Prompt",
+        "default": true
+      },
+      "style_strength": {
+        "type": "number",
+        "title": "Style strength",
+        "format": "float",
+        "default": 1,
+        "maximum": 1,
+        "minimum": 0
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.094"
+}

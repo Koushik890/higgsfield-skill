@@ -1,0 +1,73 @@
+{
+  "id": "higgsfield-genjutsu-motion-transfer-v1.0",
+  "name": "Genjutsu Motion Transfer",
+  "endpoint": "higgsfield/genjutsu/motion-transfer/v1.0",
+  "category": "video2video",
+  "summary": "Transforms existing videos using image references for different characters, locations, and styles, preserving the original motion, camera movement, and timing throughout the resulting video clip.",
+  "docs": "https://open.higgsfield.ai/models/higgsfield/genjutsu/motion-transfer/v1.0/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/higgsfield/genjutsu/motion-transfer/v1.0/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Per-second pricing. Each second of input video costs $0.318 at 480p or $0.681 at 720p. Input duration is rounded up to the nearest whole second. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "",
+    "video_url": "https://example.com/input.mp4",
+    "image_urls": [
+      "https://example.com/input.jpg"
+    ],
+    "resolution": "720p"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "MotionTransferParams",
+    "required": [
+      "video_url",
+      "image_urls"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "default": "",
+        "maxLength": 10000
+      },
+      "video_url": {
+        "type": "string",
+        "title": "Video Url",
+        "format": "uri",
+        "maxLength": 2083,
+        "minLength": 1
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1
+        },
+        "title": "Image Urls",
+        "maxItems": 8,
+        "minItems": 1
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "480p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "720p"
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "unpriced"
+}

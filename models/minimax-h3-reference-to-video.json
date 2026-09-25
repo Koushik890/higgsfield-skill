@@ -1,0 +1,118 @@
+{
+  "id": "minimax-h3-reference-to-video",
+  "name": "MiniMax H3",
+  "endpoint": "minimax/h3/reference-to-video",
+  "category": "image2video, video2video",
+  "summary": "MiniMax H3 generates videos from reference images or videos using Video Generation V2. Users provide prompts, reference media URLs, and optional audio to create videos up to 15 seconds with customizable resolution and aspect ratio.",
+  "docs": "https://open.higgsfield.ai/models/minimax/h3/reference-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/minimax/h3/reference-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "2K output costs $0.13 per generated second. The first five reference images are included; each additional reference image costs $0.08. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "2K",
+    "aspect_ratio": "auto",
+    "aigc_watermark": false
+  },
+  "input_schema": {
+    "if": {
+      "required": [
+        "image_urls"
+      ]
+    },
+    "else": {
+      "required": [
+        "video_urls"
+      ]
+    },
+    "type": "object",
+    "title": "MiniMax H3 Reference to Video Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 5
+      },
+      "audio_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Reference audio URLs",
+        "maxItems": 3,
+        "minItems": 0
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Reference image URLs",
+        "maxItems": 9,
+        "minItems": 1
+      },
+      "resolution": {
+        "enum": [
+          "2K"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "2K"
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Reference video URLs",
+        "maxItems": 3,
+        "minItems": 1
+      },
+      "aspect_ratio": {
+        "enum": [
+          "auto",
+          "adaptive",
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "type": "string",
+        "title": "Aspect ratio",
+        "default": "auto"
+      },
+      "aigc_watermark": {
+        "type": "boolean",
+        "title": "AIGC watermark",
+        "default": false
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "unpriced"
+}

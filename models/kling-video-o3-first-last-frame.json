@@ -1,0 +1,122 @@
+{
+  "id": "kling-video-o3-first-last-frame",
+  "name": "Kling O3",
+  "endpoint": "kling-video/o3/first-last-frame",
+  "category": "image2video",
+  "summary": "Generates and edits videos using image or video references, multi-shot scenes and native sound.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/o3/first-last-frame/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/o3/first-last-frame/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "mode": "pro",
+    "sound": "off",
+    "duration": 5,
+    "multi_shots": false
+  },
+  "input_schema": {
+    "if": {
+      "properties": {
+        "multi_shots": {
+          "const": true
+        }
+      }
+    },
+    "else": {
+      "required": [
+        "prompt",
+        "first_frame_url"
+      ]
+    },
+    "then": {
+      "required": [
+        "multi_prompt",
+        "first_frame_url"
+      ]
+    },
+    "type": "object",
+    "title": "Kling O3 Playground",
+    "properties": {
+      "mode": {
+        "enum": [
+          "std",
+          "pro",
+          "4k"
+        ],
+        "type": "string",
+        "default": "pro"
+      },
+      "sound": {
+        "enum": [
+          "on",
+          "off"
+        ],
+        "type": "string",
+        "default": "off"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 3
+      },
+      "multi_shots": {
+        "type": "boolean",
+        "default": false
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "type": "string"
+      },
+      "multi_prompt": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "maxLength": 512
+            },
+            "duration": {
+              "type": "integer",
+              "maximum": 15,
+              "minimum": 1
+            }
+          }
+        },
+        "maxItems": 6,
+        "minItems": 1
+      },
+      "last_frame_url": {
+        "type": "string",
+        "title": "Last frame URL",
+        "format": "uri"
+      },
+      "first_frame_url": {
+        "type": "string",
+        "title": "First frame URL",
+        "format": "uri"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.308"
+}

@@ -1,0 +1,107 @@
+{
+  "id": "lightricks-ltx-2.5-text-to-video-fast",
+  "name": "LTX-2.5 Fast",
+  "endpoint": "lightricks/ltx-2.5/text-to-video/fast",
+  "category": "text2video",
+  "summary": "Generates videos from text or images with native audio, camera motion controls and 4K resolution.",
+  "docs": "https://open.higgsfield.ai/models/lightricks/ltx-2.5/text-to-video/fast/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/lightricks/ltx-2.5/text-to-video/fast/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "fps": 25,
+    "prompt": "A cinematic scene at sunset",
+    "duration": 6,
+    "resolution": "720p",
+    "aspect_ratio": "16:9",
+    "generate_audio": true
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "LTX-2.5 Fast Text to Video Playground",
+    "required": [
+      "prompt",
+      "duration"
+    ],
+    "properties": {
+      "fps": {
+        "enum": [
+          24,
+          25,
+          48,
+          50
+        ],
+        "type": "integer",
+        "title": "Frames per second",
+        "default": 25
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "maxLength": 5000,
+        "minLength": 2,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "enum": [
+          6,
+          8,
+          10
+        ],
+        "type": "integer",
+        "title": "Duration",
+        "default": 6
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "720p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16"
+        ],
+        "type": "string",
+        "title": "Aspect ratio",
+        "default": "16:9"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "title": "Generate audio",
+        "default": true
+      },
+      "camera_movement": {
+        "enum": [
+          "dolly_in",
+          "dolly_out",
+          "dolly_left",
+          "dolly_right",
+          "jib_up",
+          "jib_down",
+          "static",
+          "focus_shift"
+        ],
+        "type": "string",
+        "title": "Camera movement"
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "api",
+  "sample_usd": "0.540"
+}

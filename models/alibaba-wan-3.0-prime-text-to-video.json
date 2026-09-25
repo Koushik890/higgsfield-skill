@@ -1,0 +1,90 @@
+{
+  "id": "alibaba-wan-3.0-prime-text-to-video",
+  "name": "Wan 3.0 Prime Text to Video",
+  "endpoint": "alibaba/wan-3.0-prime/text-to-video",
+  "category": "text2video",
+  "summary": "Generates videos from text or media references with fast processing and clips up to 30 seconds.",
+  "docs": "https://open.higgsfield.ai/models/alibaba/wan-3.0-prime/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/alibaba/wan-3.0-prime/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "1080p",
+    "aspect_ratio": "adaptive",
+    "generate_audio": true,
+    "enable_thinking": false
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Wan 3.0 Prime Text to Video",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "title": "Seed",
+        "maximum": 2147483647,
+        "minimum": 0
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration (sec)",
+        "default": 5,
+        "maximum": 30,
+        "minimum": 2,
+        "description": "2-30 seconds."
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "1080p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "adaptive"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "adaptive"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "title": "Sound",
+        "default": true
+      },
+      "enable_thinking": {
+        "type": "boolean",
+        "title": "Deep Thinking",
+        "default": false
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.980"
+}

@@ -1,0 +1,93 @@
+{
+  "id": "xai-grok-imagine-video-v1.5-reference-to-video",
+  "name": "Grok Imagine Video 1.5",
+  "endpoint": "xai/grok-imagine-video/v1.5/reference-to-video",
+  "category": "image2video, text2video",
+  "summary": "Creates videos from text prompts or still images, with 1080p resolution and clips up to 15 seconds.",
+  "docs": "https://open.higgsfield.ai/models/xai/grok-imagine-video/v1.5/reference-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/xai/grok-imagine-video/v1.5/reference-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "480p",
+    "aspect_ratio": "auto"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Grok Imagine Video 1.5 Reference Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 1
+      },
+      "audio_url": {
+        "type": "string",
+        "title": "Reference audio",
+        "format": "uri"
+      },
+      "image_url": {
+        "type": "string",
+        "title": "First-frame image",
+        "format": "uri"
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Image",
+          "format": "uri"
+        },
+        "title": "Reference images",
+        "maxItems": 7,
+        "minItems": 0
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "480p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "auto",
+          "1:1",
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3"
+        ],
+        "type": "string",
+        "default": "auto"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.400"
+}

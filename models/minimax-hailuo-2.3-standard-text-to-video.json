@@ -1,0 +1,54 @@
+{
+  "id": "minimax-hailuo-2.3-standard-text-to-video",
+  "name": "MiniMax Hailuo 2.3 Standard",
+  "endpoint": "minimax/hailuo-2.3/standard/text-to-video",
+  "category": "text2video",
+  "summary": "Generates short videos from text or images with fluid body motion and natural facial expressions.",
+  "docs": "https://open.higgsfield.ai/models/minimax/hailuo-2.3/standard/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/minimax/hailuo-2.3/standard/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 6,
+    "prompt_optimizer": true
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Minimax Hailuo 2.3 Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "enum": [
+          6,
+          10
+        ],
+        "type": "integer",
+        "title": "Duration",
+        "default": 6
+      },
+      "prompt_optimizer": {
+        "type": "boolean",
+        "title": "Prompt optimizer",
+        "default": true
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.070"
+}

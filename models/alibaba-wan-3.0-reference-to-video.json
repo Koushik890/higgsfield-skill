@@ -1,0 +1,135 @@
+{
+  "id": "alibaba-wan-3.0-reference-to-video",
+  "name": "Wan 3.0 Reference to Video",
+  "endpoint": "alibaba/wan-3.0/reference-to-video",
+  "category": "image2video",
+  "summary": "Generate videos guided by reference images with Wan 3.0.",
+  "docs": "https://open.higgsfield.ai/models/alibaba/wan-3.0/reference-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/alibaba/wan-3.0/reference-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Priced per generated second by resolution: 480p $0.05, 720p $0.10, or 1080p $0.20. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "1080p",
+    "aspect_ratio": "adaptive",
+    "generate_audio": true,
+    "enable_thinking": false
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Wan 3.0 Reference to Video",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "title": "Seed",
+        "maximum": 2147483647,
+        "minimum": 0
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration (sec)",
+        "default": 5,
+        "maximum": 30,
+        "minimum": 2,
+        "description": "2-30 seconds."
+      },
+      "file_url": {
+        "type": "string",
+        "title": "Reference Document",
+        "format": "uri",
+        "description": "One document (docx/xlsx/pptx/pdf/md). Forces deep thinking."
+      },
+      "link_url": {
+        "type": "string",
+        "title": "Reference Web Page",
+        "format": "uri",
+        "description": "One public page. Forces deep thinking. Not combinable with file_url."
+      },
+      "audio_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Reference Audio",
+        "maxItems": 5,
+        "description": "Up to 5 files, 30s total. WAV or MP3."
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Reference Images",
+        "maxItems": 10
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "1080p"
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Reference Videos",
+        "maxItems": 5,
+        "description": "Up to 5 clips, 30s total, each 1-30s."
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "adaptive"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "adaptive"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "title": "Sound",
+        "default": true
+      },
+      "enable_thinking": {
+        "type": "boolean",
+        "title": "Deep Thinking",
+        "default": false
+      }
+    }
+  },
+  "pricing": {
+    "method": "per_second",
+    "about": "Live per-second rate for the chosen resolution times duration.",
+    "rates_regex": "(\\d+p) \\$([0-9]+(?:\\.[0-9]+)?)"
+  },
+  "price_check": "rule"
+}

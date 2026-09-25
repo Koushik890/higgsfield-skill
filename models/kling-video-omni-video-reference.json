@@ -1,0 +1,105 @@
+{
+  "id": "kling-video-omni-video-reference",
+  "name": "Kling Omni",
+  "endpoint": "kling-video/omni/video-reference",
+  "category": "image2video",
+  "summary": "Kling Omni Video Reference generates videos from a single input video URL combined with a text prompt and optional images or elements. It supports customizable duration and aspect ratios, enabling creative video synthesis based on reference footage.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/omni/video-reference/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/omni/video-reference/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "mode": "pro",
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "video_urls": [
+      "https://example.com/input.mp4"
+    ],
+    "aspect_ratio": "16:9"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling Omni Playground",
+    "required": [
+      "prompt",
+      "video_urls"
+    ],
+    "properties": {
+      "mode": {
+        "enum": [
+          "std",
+          "pro"
+        ],
+        "type": "string",
+        "default": "pro"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "mode": {
+          "enum": [
+            "std",
+            "pro"
+          ],
+          "type": "string",
+          "default": "pro"
+        },
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 10,
+        "minimum": 3
+      },
+      "elements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 4,
+        "minItems": 0
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Image URL",
+          "format": "uri"
+        },
+        "maxItems": 4,
+        "minItems": 0
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Video URL",
+          "format": "uri"
+        },
+        "maxItems": 1,
+        "minItems": 1
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "type": "string",
+        "default": "16:9"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.462"
+}

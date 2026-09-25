@@ -1,0 +1,132 @@
+{
+  "id": "marketing-studio-image-sunburst",
+  "name": "Marketing Studio Image",
+  "endpoint": "marketing-studio/image/sunburst",
+  "category": "image_edit, text2image",
+  "summary": "Generate and edit Marketing Studio images with GPT Image 2.5 Sunburst.",
+  "docs": "https://open.higgsfield.ai/models/marketing-studio/image/sunburst/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/marketing-studio/image/sunburst/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Per 1M tokens: text input $5, cached text input $1.25, text output $10; image input $8, cached image input $2, image output $30. Quality defaults to high. Final cost uses actual token usage and standard credit rounding. The initial charge is an estimate reconciled on completion.",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "quality": "high",
+    "moderation": "auto",
+    "resolution": "2k",
+    "aspect_ratio": "auto",
+    "enhance_prompt": false
+  },
+  "input_schema": {
+    "type": "object",
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "enhance_prompt"
+          ],
+          "properties": {
+            "enhance_prompt": {
+              "const": true
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "preset_id",
+            "image_urls"
+          ],
+          "properties": {
+            "image_urls": {
+              "maxItems": 2,
+              "minItems": 1
+            }
+          }
+        }
+      }
+    ],
+    "title": "GPT Image 2.5 Sunburst",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "maxLength": 5000,
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "quality": {
+        "enum": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ],
+        "type": "string",
+        "title": "Quality",
+        "default": "high"
+      },
+      "preset_id": {
+        "type": "string",
+        "title": "Preset ID",
+        "format": "uuid"
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": "Image URLs",
+        "maxItems": 16,
+        "minItems": 0
+      },
+      "moderation": {
+        "enum": [
+          "auto",
+          "low"
+        ],
+        "type": "string",
+        "default": "auto"
+      },
+      "resolution": {
+        "enum": [
+          "1k",
+          "2k",
+          "4k"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "2k"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "auto",
+          "1:1",
+          "3:2",
+          "2:3",
+          "4:3",
+          "3:4",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "auto"
+      },
+      "enhance_prompt": {
+        "type": "boolean",
+        "title": "Enhance prompt",
+        "default": false
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "unpriced"
+}

@@ -1,0 +1,72 @@
+{
+  "id": "kling-video-motion-control-pro",
+  "name": "Kling 2.6",
+  "endpoint": "kling-video/motion-control/pro",
+  "category": "image2video",
+  "summary": "Kling 2.6 Motion Control (Pro) generates videos by animating a source image using the motion from a provided video. Users can control character orientation and choose to retain the original video's sound for customized video creation.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/motion-control/pro/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/motion-control/pro/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "",
+    "image_url": "https://example.com/input.jpg",
+    "video_url": "https://example.com/input.mp4",
+    "keep_original_sound": "yes",
+    "character_orientation": "video"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling Motion Control Playground",
+    "required": [
+      "image_url",
+      "video_url"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "default": "",
+        "description": "Write your prompt here"
+      },
+      "image_url": {
+        "type": "string",
+        "title": "Image URL",
+        "format": "uri"
+      },
+      "video_url": {
+        "type": "string",
+        "title": "Video URL",
+        "format": "uri"
+      },
+      "keep_original_sound": {
+        "enum": [
+          "yes",
+          "no"
+        ],
+        "type": "string",
+        "title": "Keep original sound",
+        "default": "yes"
+      },
+      "character_orientation": {
+        "enum": [
+          "image",
+          "video"
+        ],
+        "type": "string",
+        "title": "Character orientation",
+        "default": "video",
+        "description": "Generate the orientation of the characters in the video, which can be selected to match the image or the video"
+      }
+    }
+  },
+  "price_check": "estimate-error"
+}

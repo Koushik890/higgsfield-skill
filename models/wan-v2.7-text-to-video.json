@@ -1,0 +1,89 @@
+{
+  "id": "wan-v2.7-text-to-video",
+  "name": "Wan 2.7",
+  "endpoint": "wan/v2.7/text-to-video",
+  "category": "text2video",
+  "summary": "Generates videos from text or images with native audio and consistent characters across scenes.",
+  "docs": "https://open.higgsfield.ai/models/wan/v2.7/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/wan/v2.7/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "720p",
+    "aspect_ratio": "16:9",
+    "prompt_extend": false,
+    "negative_prompt": ""
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Wan 2.6 Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 2147483646,
+        "minimum": 1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 2
+      },
+      "audio_url": {
+        "type": "string",
+        "title": "Audio URL",
+        "format": "uri"
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "16:9"
+      },
+      "prompt_extend": {
+        "type": "boolean",
+        "default": false
+      },
+      "negative_prompt": {
+        "type": "string",
+        "title": "Negative prompt",
+        "default": ""
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.250"
+}

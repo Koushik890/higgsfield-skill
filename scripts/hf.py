@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 from uuid import UUID
 
@@ -158,18 +158,29 @@ def model_dirs():
     return [Path.cwd() / "work" / "higgsfield" / "models", MODELS_DIR]
 
 
+def model_files():
+    """Map model id -> file, project models first so they override bundled ones."""
+    files = {}
+    for d in reversed(model_dirs()):
+        for p in sorted(d.glob("*.json")) if d.is_dir() else []:
+            files[p.stem] = p
+    return files
+
+
 def load_model(name):
     path = Path(name)
     if path.suffix != ".json":
-        path = next((d / f"{name}.json" for d in model_dirs() if (d / f"{name}.json").is_file()), None)
+        files = model_files()
+        path = files.get(name) or files.get(name.strip("/").replace("/", "-"))
         if path is None:
-            known = ", ".join(sorted(p.stem for d in model_dirs() if d.is_dir() for p in d.glob("*.json")))
-            raise HFError(f"Unknown model '{name}'. Known: {known or 'none'}")
+            close = [m for m in files if all(part in m for part in re.split(r"[\s/_-]+", name.lower()) if part)]
+            hint = f" Did you mean: {', '.join(close[:8])}?" if close else " Run `models` to list them."
+            raise HFError(f"Unknown model '{name}'.{hint}")
     try:
         spec = json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise HFError(f"Cannot read model file {path}: {exc}") from None
-    for key in ("id", "endpoint", "params"):
+    for key in ("id", "endpoint", "input_schema"):
         if key not in spec:
             raise HFError(f"Model file {path} is missing '{key}'")
     if not re.fullmatch(r"[a-z0-9][a-z0-9._\-/]*", spec["endpoint"]) or ".." in spec["endpoint"]:
@@ -177,49 +188,138 @@ def load_model(name):
     return spec
 
 
-def list_models():
-    seen, rows = set(), []
-    for d in model_dirs():
-        for p in sorted(d.glob("*.json")) if d.is_dir() else []:
-            if p.stem in seen:
-                continue
-            seen.add(p.stem)
-            spec = json.loads(p.read_text(encoding="utf-8"))
-            rows.append({"model": p.stem, "name": spec.get("name", ""), "endpoint": spec["endpoint"],
-                         "checked": spec.get("checked", ""), "file": str(p)})
+def list_models(search=None):
+    rows = []
+    for stem, path in sorted(model_files().items()):
+        spec = json.loads(path.read_text(encoding="utf-8"))
+        row = {"model": stem, "name": spec.get("name", ""), "category": spec.get("category", ""),
+               "price": spec.get("price_check", "unchecked")}
+        if spec.get("sample_usd"):
+            row["example_usd"] = spec["sample_usd"]
+        if not search or all(w in json.dumps(row).lower() for w in search.lower().split()):
+            rows.append(row)
     return rows
 
 
-TYPES = {"string": str, "integer": int, "number": (int, float), "boolean": bool}
+def model_info(spec):
+    props = spec["input_schema"].get("properties", {})
+    required = set(spec["input_schema"].get("required", []))
+    params = {}
+    for name, rule in props.items():
+        brief = {k: rule[k] for k in ("type", "enum", "default", "minimum", "maximum", "minItems", "maxItems",
+                                     "maxLength", "format") if k in rule}
+        if rule.get("type") == "array" and isinstance(rule.get("items"), dict):
+            brief["items"] = rule["items"].get("type") or "object"
+        if rule.get("description"):
+            brief["about"] = rule["description"][:200]
+        if name in required:
+            brief["required"] = True
+        params[name] = brief
+    return {"model": spec["id"], "name": spec.get("name"), "endpoint": spec["endpoint"],
+            "price_check": spec.get("price_check"), "example_usd": spec.get("sample_usd"),
+            "category": spec.get("category"), "summary": spec.get("summary"), "pricing": spec.get("pricing_note") or
+            "Not published; `estimate` asks your account for the price.", "outputs": spec.get("outputs"),
+            "params": params, "example": spec.get("example"), "docs": spec.get("docs")}
+
+
+# Subset of JSON Schema used by Higgsfield model schemas.
+_TYPES = {"string": str, "integer": int, "number": (int, float), "boolean": bool,
+          "array": list, "object": dict, "null": type(None)}
+
+
+def _is_type(value, kind):
+    if kind in ("integer", "number") and isinstance(value, bool):
+        return False
+    if kind == "integer" and isinstance(value, float) and value.is_integer():
+        return True
+    return isinstance(value, _TYPES.get(kind, object))
+
+
+def schema_errors(schema, value, where="request"):
+    """Yield human-readable problems; empty means valid."""
+    if not isinstance(schema, dict):
+        return
+    kinds = schema.get("type")
+    if kinds is not None:
+        kinds = kinds if isinstance(kinds, list) else [kinds]
+        if not any(_is_type(value, k) for k in kinds):
+            yield f"{where} must be {' or '.join(kinds)}"
+            return
+    if "const" in schema and value != schema["const"]:
+        yield f"{where} must be {schema['const']!r}"
+    if "enum" in schema and value not in schema["enum"]:
+        yield f"{where} must be one of {schema['enum']}, got {value!r}"
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if "minimum" in schema and value < schema["minimum"]:
+            yield f"{where} must be >= {schema['minimum']}"
+        if "maximum" in schema and value > schema["maximum"]:
+            yield f"{where} must be <= {schema['maximum']}"
+        if "exclusiveMinimum" in schema and value <= schema["exclusiveMinimum"]:
+            yield f"{where} must be > {schema['exclusiveMinimum']}"
+        if "exclusiveMaximum" in schema and value >= schema["exclusiveMaximum"]:
+            yield f"{where} must be < {schema['exclusiveMaximum']}"
+        step = schema.get("multipleOf")
+        if step and abs(Decimal(str(value)) % Decimal(str(step))) != 0:
+            yield f"{where} must be a multiple of {step}"
+    if isinstance(value, str):
+        if len(value) < schema.get("minLength", 0) or (schema.get("minLength") and not value.strip()):
+            yield f"{where} must not be empty" if schema.get("minLength") == 1 else f"{where} is too short"
+        if "maxLength" in schema and len(value) > schema["maxLength"]:
+            yield f"{where} must be at most {schema['maxLength']} characters"
+        if "pattern" in schema and not re.search(schema["pattern"], value):
+            yield f"{where} has the wrong format"
+        if schema.get("format") == "uri" and not re.match(r"https?://[^\s/]+", value):
+            yield f"{where} must be a public URL (use `upload` for local files)"
+        if schema.get("format") == "uuid":
+            try:
+                UUID(value)
+            except ValueError:
+                yield f"{where} must be a UUID"
+    if isinstance(value, list):
+        if len(value) < schema.get("minItems", 0):
+            yield f"{where} needs at least {schema['minItems']} item(s)"
+        if "maxItems" in schema and len(value) > schema["maxItems"]:
+            yield f"{where} allows at most {schema['maxItems']} item(s)"
+        for i, item in enumerate(value):
+            yield from schema_errors(schema.get("items"), item, f"{where}[{i}]")
+    if isinstance(value, dict):
+        props = schema.get("properties", {})
+        for name in schema.get("required", []):
+            if name not in value:
+                yield f"missing required '{name}'" if where == "request" else f"{where}.{name} is required"
+        extra = schema.get("additionalProperties", True)
+        for name, item in value.items():
+            path = name if where == "request" else f"{where}.{name}"
+            if name in props:
+                yield from schema_errors(props[name], item, path)
+            elif extra is False:
+                yield f"unknown parameter '{path}' (allowed: {', '.join(props)})"
+            elif isinstance(extra, dict):
+                yield from schema_errors(extra, item, path)
+    for sub in schema.get("allOf", []):
+        yield from schema_errors(sub, value, where)
+    if "anyOf" in schema and all(list(schema_errors(s, value, where)) for s in schema["anyOf"]):
+        yield f"{where} does not match any allowed form"
+    if "oneOf" in schema and sum(not list(schema_errors(s, value, where)) for s in schema["oneOf"]) != 1:
+        yield f"{where} must match exactly one allowed form"
+    if "if" in schema:
+        branch = "then" if not list(schema_errors(schema["if"], value, where)) else "else"
+        yield from schema_errors(schema.get(branch), value, where)
 
 
 def validate(spec, inputs):
     if not isinstance(inputs, dict):
         raise HFError("Request must be a JSON object")
-    params = spec["params"]
-    unknown = sorted(set(inputs) - set(params))
-    if unknown:
-        raise HFError(f"Unknown parameter(s) for {spec['id']}: {', '.join(unknown)}. Allowed: {', '.join(params)}")
-    for name, rule in params.items():
-        if name not in inputs:
-            if rule.get("required"):
-                raise HFError(f"Missing required parameter '{name}'")
-            continue
-        value, kind = inputs[name], rule.get("type", "string")
-        ok = isinstance(value, TYPES[kind]) and not (kind in ("integer", "number") and isinstance(value, bool))
-        if ok and kind == "string" and rule.get("required") and not value.strip():
-            ok = False
-        if not ok:
-            raise HFError(f"'{name}' must be a non-empty {kind}" if kind == "string" else f"'{name}' must be {kind}")
-        if "enum" in rule and value not in rule["enum"]:
-            raise HFError(f"'{name}' must be one of {rule['enum']}, got {value!r}")
-        if "min" in rule and value < rule["min"] or "max" in rule and value > rule["max"]:
-            raise HFError(f"'{name}' must be between {rule.get('min')} and {rule.get('max')}, got {value}")
+    if "properties" not in spec["input_schema"]:
+        raise HFError(f"Higgsfield publishes no input parameters for {spec['id']}; use it from the console instead")
+    problems = list(dict.fromkeys(schema_errors(spec["input_schema"], inputs)))
+    if problems:
+        raise HFError(f"Invalid request for {spec['id']}: " + "; ".join(problems[:6]))
     return inputs
 
 
 def effective(spec, payload, key):
-    return payload.get(key, spec["params"].get(key, {}).get("default"))
+    return payload.get(key, spec["input_schema"].get("properties", {}).get(key, {}).get("default"))
 
 
 # -------------------------------------------------------------------- pricing
@@ -231,14 +331,28 @@ def video_token_price(spec, payload, description):
     if not match:
         raise HFError("Higgsfield's pricing text no longer matches this model file; re-check the model page before generating")
     rate = usd(match.group(1))
-    size = rule["sizes"].get(str(effective(spec, payload, "resolution")), {}).get(str(effective(spec, payload, "aspect_ratio")))
-    if not size:
-        raise HFError("No known output size for this resolution/aspect ratio; cannot price it")
+    by_aspect = rule["sizes"].get(str(effective(spec, payload, "resolution")))
+    if not by_aspect:
+        raise HFError("No known output size for this resolution; cannot price it")
+    size = by_aspect.get(str(effective(spec, payload, "aspect_ratio")))
+    # When the output shape follows an input image, price the largest shape as an upper bound.
+    upper_bound = size is None
+    width, height = size or max(by_aspect.values(), key=lambda wh: wh[0] * wh[1])
     seconds = int(effective(spec, payload, "duration"))
-    width, height = size
     divisor = int(rule["divisor"])
     tokens = (seconds * width * height * int(rule["fps"]) + divisor - 1) // divisor
-    return (Decimal(tokens) * rate / Decimal(rule["per_tokens"])).quantize(Decimal("0.0001"), ROUND_HALF_UP)
+    price = (Decimal(tokens) * rate / Decimal(rule["per_tokens"])).quantize(Decimal("0.0001"), ROUND_HALF_UP)
+    return price, "computed from live rate" + (" (upper bound)" if upper_bound else "")
+
+
+def per_second_price(spec, payload, description):
+    """Wan-style pricing: a live per-second rate for the chosen resolution times the duration."""
+    rates = {res: usd(amount) for res, amount in re.findall(spec["pricing"]["rates_regex"], description)}
+    resolution = str(effective(spec, payload, "resolution"))
+    if resolution not in rates:
+        raise HFError("Higgsfield's pricing text no longer lists this resolution; re-check before generating")
+    seconds = Decimal(str(effective(spec, payload, "duration")))
+    return (rates[resolution] * seconds).quantize(Decimal("0.0001"), ROUND_HALF_UP), "computed from live rate"
 
 
 def estimate(spec, payload):
@@ -247,9 +361,18 @@ def estimate(spec, payload):
     if result.get("usd") is not None:
         return usd(result["usd"]), "api"
     description = str(result.get("pricing_description") or "")
-    if description and spec.get("pricing", {}).get("method") == "video_tokens":
-        return video_token_price(spec, payload, description), "computed from live rate"
-    raise HFError("The estimate had no USD amount and this model has no pricing rule; check its price in the console first")
+    method = spec.get("pricing", {}).get("method")
+    if description and method == "video_tokens":
+        return video_token_price(spec, payload, description)
+    if description and method == "per_second":
+        return per_second_price(spec, payload, description)
+    raise UnpricedError("Higgsfield returned no USD estimate for this model. Pricing text: "
+                        + (description[:400] or spec.get("pricing_note") or "none published")
+                        + ". Tell the user, then pass --allow-unpriced only if they accept an unknown price.")
+
+
+class UnpricedError(HFError):
+    pass
 
 
 # ---------------------------------------------------------------------- state
@@ -301,7 +424,8 @@ def summary(job):
 
 # ----------------------------------------------------------------------- jobs
 
-def submit(store, spec, payload, name, max_usd=None, budget=None, budget_usd=None, allow_duplicate=False):
+def submit(store, spec, payload, name, max_usd=None, budget=None, budget_usd=None, allow_duplicate=False,
+           allow_unpriced=False):
     validate(spec, payload)
     if not name or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,80}", name):
         raise HFError("Job name must be letters, digits, '.', '_' or '-' (max 81 chars)")
@@ -320,8 +444,14 @@ def submit(store, spec, payload, name, max_usd=None, budget=None, budget_usd=Non
     if (budget is None) != (budget_usd is None):
         raise HFError("Use --budget and --budget-usd together")
 
-    price, source = estimate(spec, payload)
-    log(f"Estimated cost: ${price} ({source})")
+    try:
+        price, source = estimate(spec, payload)
+        log(f"Estimated cost: ${price} ({source})")
+    except UnpricedError:
+        if not allow_unpriced or max_usd is not None or budget is not None:
+            raise
+        price, source = None, "unknown (user accepted)"
+        log("Price unknown; submitting because --allow-unpriced was given.")
     if max_usd is not None and price > usd(max_usd):
         raise HFError(f"Estimate ${price} is over --max-usd ${usd(max_usd)}; nothing submitted")
 
@@ -341,7 +471,7 @@ def submit(store, spec, payload, name, max_usd=None, budget=None, budget_usd=Non
         store.db.execute(
             "INSERT INTO jobs (name, model, endpoint, payload, fingerprint, estimate_usd, price_source, budget, status, created, updated)"
             " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-            (name, spec["id"], spec["endpoint"], json.dumps(payload), fp, str(price), source, budget, "submitting", now(), now()))
+            (name, spec["id"], spec["endpoint"], json.dumps(payload), fp, None if price is None else str(price), source, budget, "submitting", now(), now()))
         store.db.execute("COMMIT")
     except BaseException:
         store.db.execute("ROLLBACK")
@@ -447,6 +577,41 @@ def download(store, name, output_dir="outputs"):
     return store.get(name)
 
 
+UPLOAD_TYPES = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp",
+                ".gif": "image/gif", ".wav": "audio/wav", ".mp4": "video/mp4"}
+
+
+def upload(file_path):
+    """Upload a local file and return its public URL for use in image_url/video_url/audio_url fields."""
+    path = Path(file_path)
+    if not path.is_file():
+        raise HFError(f"No such file: {path}")
+    content_type = UPLOAD_TYPES.get(path.suffix.lower())
+    if not content_type:
+        raise HFError(f"Unsupported file type {path.suffix}; Higgsfield accepts {', '.join(sorted(UPLOAD_TYPES))}")
+    size = path.stat().st_size
+    if size > 500 * 1024 * 1024:
+        raise HFError("File is larger than 500 MB")
+    slot = http("POST", "/files/generate-upload-url", {"content_type": content_type})
+    upload_url, public_url = slot.get("upload_url"), slot.get("public_url")
+    for url in (upload_url, public_url):
+        parts = urlsplit(url or "")
+        if parts.scheme != "https" or not parts.hostname:
+            raise HFError("Upload slot response did not contain HTTPS URLs")
+    headers = {str(k): str(v) for k, v in (slot.get("upload_headers") or {"Content-Type": content_type}).items()
+               if k.lower() not in ("authorization", "cookie", "host")}
+    headers["User-Agent"] = USER_AGENT
+    # The presigned storage URL never gets the API key.
+    request = Request(upload_url, data=path.read_bytes(), headers=headers, method="PUT")
+    try:
+        with _media_opener.open(request, timeout=600) as response:
+            response.read()
+    except (HTTPError, URLError, TimeoutError, OSError) as exc:
+        raise HFError(f"Upload to storage failed: {exc}") from None
+    log(f"Uploaded {path.name} ({size} bytes)")
+    return {"file": str(path), "public_url": public_url, "content_type": content_type}
+
+
 def attach(store, name, request_id, model=None):
     try:
         request_id = str(UUID(request_id))
@@ -493,8 +658,12 @@ def build_parser():
     p.add_argument("--state-dir", default="work/higgsfield", help="job ledger directory (default: work/higgsfield)")
     sub = p.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("models", help="list model files")
+    sub.add_parser("models", help="list models").add_argument("search", nargs="*", help="filter words, e.g. kling image")
+    sub.add_parser("info", help="show a model's parameters, example and pricing").add_argument("model")
     sub.add_parser("check", help="verify credentials reach the API (no charge)")
+    sub.add_parser("upload", help="upload a local image/video/audio, print its public URL").add_argument("file")
+    cmd = sub.add_parser("presets", help="list Marketing Studio presets (for product shots, ads)")
+    cmd.add_argument("--cursor")
 
     def request_args(cmd):
         cmd.add_argument("--model", required=True, help="model file name (see `models`) or path to a .json model file")
@@ -512,6 +681,8 @@ def build_parser():
         cmd.add_argument("--budget", help="budget group name shared across jobs")
         cmd.add_argument("--budget-usd", help="total limit for the budget group")
         cmd.add_argument("--allow-duplicate", action="store_true", help="allow paying again for an identical request")
+        cmd.add_argument("--allow-unpriced", action="store_true",
+                         help="submit even if Higgsfield gives no USD estimate (user accepted unknown price)")
         if cmd_name == "run":
             cmd.add_argument("--timeout", type=int, default=900)
             cmd.add_argument("--output-dir", default="outputs")
@@ -536,7 +707,16 @@ def main(argv=None):
     args = build_parser().parse_args(argv)
     try:
         if args.command == "models":
-            result = list_models()
+            result = list_models(" ".join(args.search))
+        elif args.command == "info":
+            result = model_info(load_model(args.model))
+        elif args.command == "upload":
+            result = upload(args.file)
+        elif args.command == "presets":
+            query = "size=50" + (f"&cursor={quote(args.cursor, safe='')}" if args.cursor else "")
+            reply = http("GET", f"/marketing-studio/image/presets?{query}")
+            result = {"cursor": reply.get("cursor"), "total": reply.get("total"),
+                      "presets": [{k: p.get(k) for k in ("id", "name", "type")} for p in reply.get("items", [])]}
         elif args.command == "check":
             # A 404 on a random request ID proves the key was accepted without generating anything.
             try:
@@ -559,7 +739,7 @@ def main(argv=None):
             if args.command in ("submit", "run"):
                 spec = load_model(args.model)
                 job = submit(store, spec, load_request(args), args.job, args.max_usd, args.budget,
-                             args.budget_usd, args.allow_duplicate)
+                             args.budget_usd, args.allow_duplicate, args.allow_unpriced)
                 if args.command == "run":
                     job = wait(store, args.job, args.timeout)
                     if job["status"] == "completed":

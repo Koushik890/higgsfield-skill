@@ -1,0 +1,143 @@
+{
+  "id": "kling-video-o3-image-reference",
+  "name": "Kling O3",
+  "endpoint": "kling-video/o3/image-reference",
+  "category": "image2video",
+  "summary": "Kling O3 Image Reference generates videos from one or multiple images using customizable prompts and settings like duration, aspect ratio, and sound. It supports both single and multi-shot workflows with options for intelligent or customized shot types.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/o3/image-reference/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/o3/image-reference/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "mode": "std",
+    "sound": "off",
+    "duration": 5,
+    "shot_type": "customize",
+    "multi_shots": false
+  },
+  "input_schema": {
+    "if": {
+      "properties": {
+        "multi_shots": {
+          "const": true
+        }
+      }
+    },
+    "else": {
+      "required": [
+        "prompt"
+      ]
+    },
+    "then": {
+      "required": [
+        "multi_prompt"
+      ]
+    },
+    "type": "object",
+    "title": "Kling Omni Playground",
+    "properties": {
+      "mode": {
+        "enum": [
+          "std",
+          "pro",
+          "4k"
+        ],
+        "type": "string",
+        "default": "std"
+      },
+      "sound": {
+        "enum": [
+          "on",
+          "off"
+        ],
+        "type": "string",
+        "default": "off"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 3
+      },
+      "elements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "shot_type": {
+        "enum": [
+          "customize",
+          "intelligent"
+        ],
+        "type": "string",
+        "default": "customize"
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Image URL",
+          "format": "uri"
+        }
+      },
+      "multi_shots": {
+        "type": "boolean",
+        "default": false
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "type": "string"
+      },
+      "multi_prompt": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "maxLength": 512
+            },
+            "duration": {
+              "type": "integer",
+              "maximum": 15,
+              "minimum": 0
+            }
+          }
+        },
+        "maxItems": 6,
+        "minItems": 1
+      },
+      "last_frame_url": {
+        "type": "string",
+        "title": "Last frame URL",
+        "format": "uri"
+      },
+      "first_frame_url": {
+        "type": "string",
+        "title": "First frame URL",
+        "format": "uri"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.231"
+}

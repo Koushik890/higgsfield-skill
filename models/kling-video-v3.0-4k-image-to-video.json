@@ -1,0 +1,105 @@
+{
+  "id": "kling-video-v3.0-4k-image-to-video",
+  "name": "Kling 3.0 4k",
+  "endpoint": "kling-video/v3.0/4k/image-to-video",
+  "category": "image2video",
+  "summary": "Kling 3.0 4K converts a single image URL into a video up to 15 seconds long, with optional sound generation and multi-shot or multi-prompt support. Users can customize duration, prompts, and configuration scale to influence the video output.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/v3.0/4k/image-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/v3.0/4k/image-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "sound": "on",
+    "duration": 5,
+    "cfg_scale": 0.5,
+    "image_url": "https://example.com/input.jpg",
+    "multi_shots": false
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling 3.0 Playground",
+    "required": [
+      "image_url"
+    ],
+    "properties": {
+      "sound": {
+        "enum": [
+          "on",
+          "off"
+        ],
+        "type": "string",
+        "title": "Generate sound",
+        "default": "on"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 3
+      },
+      "elements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "cfg_scale": {
+        "type": "number",
+        "title": "CFG Scale",
+        "default": 0.5,
+        "maximum": 1,
+        "minimum": 0,
+        "multipleOf": 0.01
+      },
+      "image_url": {
+        "type": "string",
+        "title": "Image URL",
+        "format": "uri"
+      },
+      "multi_shots": {
+        "type": "boolean",
+        "default": false
+      },
+      "multi_prompt": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "maxLength": 512
+            },
+            "duration": {
+              "type": "integer",
+              "maximum": 15,
+              "minimum": 1
+            }
+          }
+        },
+        "maxItems": 6,
+        "minItems": 0
+      },
+      "last_image_url": {
+        "type": "string",
+        "title": "Image URL",
+        "format": "uri"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "1.155"
+}

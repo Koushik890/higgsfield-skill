@@ -1,0 +1,65 @@
+{
+  "id": "alibaba-happy-horse-image-to-video",
+  "name": "Happy Horse 1.0",
+  "endpoint": "alibaba/happy-horse/image-to-video",
+  "category": "image2video",
+  "summary": "Happy Horse 1.0 - Image to Video. Configured Alibaba route; cloned from hh/image-to-video.",
+  "docs": "https://open.higgsfield.ai/models/alibaba/happy-horse/image-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/alibaba/happy-horse/image-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "duration": 5,
+    "image_url": "https://example.com/input.jpg",
+    "resolution": "720p"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Happy horse",
+    "required": [
+      "image_url"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 2147483646,
+        "minimum": 1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 2
+      },
+      "image_url": {
+        "type": "string",
+        "title": "Image URL",
+        "format": "uri"
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "default": "720p"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.490"
+}

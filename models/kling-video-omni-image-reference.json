@@ -1,0 +1,79 @@
+{
+  "id": "kling-video-omni-image-reference",
+  "name": "Kling Omni",
+  "endpoint": "kling-video/omni/image-reference",
+  "category": "image2video",
+  "summary": "Kling Omni Image Reference generates videos from images and text prompts, allowing customization of duration, aspect ratio, and elements. It supports modes for standard or professional output, making it suitable for creating dynamic video content from static images.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/omni/image-reference/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/omni/image-reference/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "mode": "pro",
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "aspect_ratio": "16:9"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling Omni Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "mode": {
+        "enum": [
+          "std",
+          "pro"
+        ],
+        "type": "string",
+        "default": "pro"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 10,
+        "minimum": 3
+      },
+      "elements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Image URL",
+          "format": "uri"
+        }
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "type": "string",
+        "default": "16:9"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.308"
+}

@@ -1,0 +1,137 @@
+{
+  "id": "bytedance-seedance-2.5-image-to-video",
+  "name": "Seedance 2.5",
+  "endpoint": "bytedance/seedance-2.5/image-to-video",
+  "category": "image2video",
+  "summary": "Seedance 2.5 Image to Video generates videos from a single image URL with optional prompts, customizable duration, resolution, and output format. It supports adding an end image and generating audio to enhance the video output.",
+  "docs": "https://open.higgsfield.ai/models/bytedance/seedance-2.5/image-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/bytedance/seedance-2.5/image-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Token-metered pricing. Billable video tokens = ceil((input video seconds + generated video seconds) × output width × output height × 24 fps / 1024). Image and audio references do not count as video input. At 480p or 720p, each 1,000 video tokens cost $0.0214. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "duration": 5,
+    "image_url": "https://example.com/input.jpg",
+    "resolution": "720p",
+    "bitrate_mode": "high",
+    "generate_audio": true
+  },
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "image_url"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "default": 5,
+        "maximum": 30,
+        "minimum": 4
+      },
+      "image_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "bitrate_mode": {
+        "enum": [
+          "standard",
+          "high"
+        ],
+        "type": "string",
+        "default": "high"
+      },
+      "end_image_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "pricing": {
+    "method": "video_tokens",
+    "about": "Output shape follows the input image, so the largest 16:9..21:9 frame is used as an upper-bound estimate.",
+    "rate_regex": "each 1,000 video tokens cost \\$([0-9]+(?:\\.[0-9]+)?)",
+    "per_tokens": 1000,
+    "fps": 24,
+    "divisor": 1024,
+    "sizes": {
+      "480p": {
+        "16:9": [
+          854,
+          480
+        ],
+        "4:3": [
+          640,
+          480
+        ],
+        "1:1": [
+          480,
+          480
+        ],
+        "3:4": [
+          360,
+          480
+        ],
+        "9:16": [
+          270,
+          480
+        ],
+        "21:9": [
+          1006,
+          480
+        ]
+      },
+      "720p": {
+        "16:9": [
+          1280,
+          720
+        ],
+        "4:3": [
+          960,
+          720
+        ],
+        "1:1": [
+          720,
+          720
+        ],
+        "3:4": [
+          540,
+          720
+        ],
+        "9:16": [
+          405,
+          720
+        ],
+        "21:9": [
+          1502,
+          720
+        ]
+      }
+    }
+  },
+  "price_check": "rule"
+}

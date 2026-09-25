@@ -1,0 +1,75 @@
+{
+  "id": "z-image-turbo",
+  "name": "Z-Image Turbo",
+  "endpoint": "z-image/turbo",
+  "category": "text2image",
+  "summary": "Generates images quickly with clear Chinese and English text rendering and PNG output up to 2K.",
+  "docs": "https://open.higgsfield.ai/models/z-image/turbo/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/z-image/turbo/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "resolution": "1k",
+    "aspect_ratio": "1:1",
+    "prompt_extend": false
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Z-Image Turbo",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 2147483647,
+        "minimum": 0,
+        "description": "Optional random seed for similar, reproducible results."
+      },
+      "prompt": {
+        "type": "string",
+        "maxLength": 800,
+        "minLength": 1,
+        "description": "Positive prompt describing the desired content, style, and composition."
+      },
+      "resolution": {
+        "enum": [
+          "1k",
+          "2k"
+        ],
+        "type": "string",
+        "default": "1k",
+        "description": "Output resolution tier. Both tiers produce PNG images."
+      },
+      "aspect_ratio": {
+        "enum": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "3:4",
+          "4:3",
+          "7:9",
+          "9:7",
+          "9:16",
+          "16:9",
+          "21:9"
+        ],
+        "type": "string",
+        "default": "1:1",
+        "description": "Output aspect ratio. Exact provider-recommended dimensions are selected automatically."
+      },
+      "prompt_extend": {
+        "type": "boolean",
+        "default": false,
+        "description": "Rewrite and reason over the prompt before generation; this uses the enhanced price tier."
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "api",
+  "sample_usd": "0.015"
+}

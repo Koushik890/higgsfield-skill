@@ -1,0 +1,118 @@
+{
+  "id": "alibaba-qwen-image-3-text-to-image",
+  "name": "Qwen Image 3",
+  "endpoint": "alibaba/qwen-image-3/text-to-image",
+  "category": "text2image",
+  "summary": "Generates images from English or Chinese text, with enhanced prompts and resolution up to 2K.",
+  "docs": "https://open.higgsfield.ai/models/alibaba/qwen-image-3/text-to-image/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/alibaba/qwen-image-3/text-to-image/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "resolution": "1k",
+    "aspect_ratio": "1:1",
+    "prompt_extend": true,
+    "enable_thinking": true,
+    "prompt_extend_mode": "direct"
+  },
+  "input_schema": {
+    "type": "object",
+    "allOf": [
+      {
+        "if": {
+          "required": [
+            "enable_thinking"
+          ],
+          "properties": {
+            "enable_thinking": {
+              "const": true
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "prompt_extend"
+          ],
+          "properties": {
+            "prompt_extend": {
+              "const": true
+            }
+          }
+        }
+      }
+    ],
+    "title": "Qwen Image 3 Text to Image",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 2147483647,
+        "minimum": 0,
+        "description": "Optional random seed for similar, reproducible results."
+      },
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Positive prompt or editing instruction in Chinese or English. Alibaba recommends at most 4,500 tokens."
+      },
+      "resolution": {
+        "enum": [
+          "1k",
+          "2k"
+        ],
+        "type": "string",
+        "default": "1k",
+        "description": "Output resolution tier. Both tiers produce PNG images."
+      },
+      "aspect_ratio": {
+        "enum": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "3:4",
+          "4:3",
+          "7:9",
+          "9:7",
+          "9:16",
+          "16:9",
+          "21:9"
+        ],
+        "type": "string",
+        "default": "1:1",
+        "description": "Output aspect ratio. Exact provider-recommended dimensions are selected automatically."
+      },
+      "prompt_extend": {
+        "type": "boolean",
+        "default": true,
+        "description": "Improve the prompt before generation. Required when thinking mode is enabled."
+      },
+      "enable_thinking": {
+        "type": "boolean",
+        "default": true,
+        "description": "Use model reasoning to improve image quality. Requires prompt enhancement."
+      },
+      "negative_prompt": {
+        "type": "string",
+        "description": "Content, styles, or artifacts to avoid in the output."
+      },
+      "prompt_extend_mode": {
+        "enum": [
+          "direct",
+          "agent"
+        ],
+        "type": "string",
+        "default": "direct",
+        "description": "Direct enhancement is available for every request; agent enhancement is text-to-image only."
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "api",
+  "sample_usd": "0.040"
+}

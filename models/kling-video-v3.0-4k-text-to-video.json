@@ -1,0 +1,102 @@
+{
+  "id": "kling-video-v3.0-4k-text-to-video",
+  "name": "Kling 3.0",
+  "endpoint": "kling-video/v3.0/4k/text-to-video",
+  "category": "text2video",
+  "summary": "Generates videos from text or images, with optional audio generation and output in 4K resolution. Supports multi-shot sequences, start and end frames, and video durations from 3 to 15 seconds.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/v3.0/4k/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/v3.0/4k/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "sound": "on",
+    "duration": 5,
+    "cfg_scale": 0.5,
+    "multi_shots": false,
+    "aspect_ratio": "16:9"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling 3.0 Playground",
+    "properties": {
+      "sound": {
+        "enum": [
+          "on",
+          "off"
+        ],
+        "type": "string",
+        "title": "Generate sound",
+        "default": "on"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 3
+      },
+      "elements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "cfg_scale": {
+        "type": "number",
+        "title": "CFG Scale",
+        "default": 0.5,
+        "maximum": 1,
+        "minimum": 0,
+        "multipleOf": 0.01
+      },
+      "multi_shots": {
+        "type": "boolean",
+        "default": false
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "type": "string",
+        "title": "Aspect ratio",
+        "default": "16:9"
+      },
+      "multi_prompt": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "maxLength": 512
+            },
+            "duration": {
+              "type": "integer",
+              "maximum": 15,
+              "minimum": 1
+            }
+          }
+        },
+        "maxItems": 6,
+        "minItems": 0
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "1.155"
+}

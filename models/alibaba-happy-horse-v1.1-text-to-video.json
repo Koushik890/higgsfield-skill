@@ -1,0 +1,73 @@
+{
+  "id": "alibaba-happy-horse-v1.1-text-to-video",
+  "name": "HappyHorse 1.1",
+  "endpoint": "alibaba/happy-horse/v1.1/text-to-video",
+  "category": "image2video",
+  "summary": "Generates videos from text or image references with output at 1080p and clips up to 15 seconds.",
+  "docs": "https://open.higgsfield.ai/models/alibaba/happy-horse/v1.1/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/alibaba/happy-horse/v1.1/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "1080p",
+    "aspect_ratio": "16:9"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Happy Horse",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 2147483646,
+        "minimum": 1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 3
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "default": "1080p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "16:9"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.630"
+}

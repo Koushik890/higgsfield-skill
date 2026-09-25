@@ -1,0 +1,68 @@
+{
+  "id": "bytedance-seedance-2.0-image-to-video",
+  "name": "Seedance 2.0",
+  "endpoint": "bytedance/seedance-2.0/image-to-video",
+  "category": "image2video",
+  "summary": "Generate videos from text with controls for duration, resolution, aspect ratio, and optional audio. Create polished multi-shot stories for ads, social content, and cinematic scenes",
+  "docs": "https://open.higgsfield.ai/models/bytedance/seedance-2.0/image-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/bytedance/seedance-2.0/image-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Token-metered pricing. Billable video tokens = ceil(generated video seconds × output width × output height × 24 fps / 1024). Image and audio references do not count as video input. Per 1,000 video tokens: 480p/720p/1080p $0.014, 4K $0.008. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "duration": 5,
+    "image_url": "https://example.com/input.jpg",
+    "resolution": "720p",
+    "generate_audio": true
+  },
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "image_url"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 4
+      },
+      "image_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "end_image_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "unpriced"
+}

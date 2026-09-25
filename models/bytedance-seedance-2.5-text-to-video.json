@@ -1,0 +1,151 @@
+{
+  "id": "bytedance-seedance-2.5-text-to-video",
+  "name": "Seedance 2.5",
+  "endpoint": "bytedance/seedance-2.5/text-to-video",
+  "category": "text2video",
+  "summary": "Generates videos from text, images, video, and audio references, with optional audio generation. Supports videos up to 30 seconds with customizable resolution, aspect ratio, and output format.",
+  "docs": "https://open.higgsfield.ai/models/bytedance/seedance-2.5/text-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/bytedance/seedance-2.5/text-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Token-metered pricing. Billable video tokens = ceil((input video seconds + generated video seconds) × output width × output height × 24 fps / 1024). Image and audio references do not count as video input. At 480p or 720p, each 1,000 video tokens cost $0.0214. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "720p",
+    "aspect_ratio": "16:9",
+    "bitrate_mode": "high",
+    "output_format": "mp4",
+    "generate_audio": true
+  },
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "default": 5,
+        "maximum": 30,
+        "minimum": 4
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "type": "string",
+        "default": "16:9"
+      },
+      "bitrate_mode": {
+        "enum": [
+          "standard",
+          "high"
+        ],
+        "type": "string",
+        "default": "high"
+      },
+      "output_format": {
+        "enum": [
+          "mp4",
+          "mov"
+        ],
+        "type": "string",
+        "default": "mp4"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "pricing": {
+    "method": "video_tokens",
+    "about": "The estimate endpoint returns a pricing description instead of USD for this model. Tokens = ceil(seconds x width x height x 24 / 1024); the per-1,000-token rate is read live from that description.",
+    "rate_regex": "each 1,000 video tokens cost \\$([0-9]+(?:\\.[0-9]+)?)",
+    "per_tokens": 1000,
+    "fps": 24,
+    "divisor": 1024,
+    "sizes": {
+      "480p": {
+        "16:9": [
+          854,
+          480
+        ],
+        "4:3": [
+          640,
+          480
+        ],
+        "1:1": [
+          480,
+          480
+        ],
+        "3:4": [
+          360,
+          480
+        ],
+        "9:16": [
+          270,
+          480
+        ],
+        "21:9": [
+          1006,
+          480
+        ]
+      },
+      "720p": {
+        "16:9": [
+          1280,
+          720
+        ],
+        "4:3": [
+          960,
+          720
+        ],
+        "1:1": [
+          720,
+          720
+        ],
+        "3:4": [
+          540,
+          720
+        ],
+        "9:16": [
+          405,
+          720
+        ],
+        "21:9": [
+          1502,
+          720
+        ]
+      }
+    }
+  },
+  "price_check": "rule"
+}

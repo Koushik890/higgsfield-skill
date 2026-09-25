@@ -1,0 +1,107 @@
+{
+  "id": "bytedance-seedance-2.0-reference-to-video",
+  "name": "Seedance 2.0",
+  "endpoint": "bytedance/seedance-2.0/reference-to-video",
+  "category": "image2video, video2video",
+  "summary": "Seedance 2.0 Reference to Video generates videos from images or existing videos, allowing customization of duration, resolution, aspect ratio, and audio inputs. It supports image-to-video and video-to-video transformations with optional audio generation.",
+  "docs": "https://open.higgsfield.ai/models/bytedance/seedance-2.0/reference-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/bytedance/seedance-2.0/reference-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Token-metered pricing. Billable video tokens = ceil((input video seconds + generated video seconds) × output width × output height × 24 fps / 1024). Image and audio references do not count as video input. Per 1,000 video tokens: without video input — 480p/720p/1080p $0.014, 4K $0.008; with video input — 480p/720p/1080p $0.0084, 4K $0.0048 (0.6× the standard rate). With video references, both input and generated video durations are billable. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "duration": 5,
+    "resolution": "720p",
+    "aspect_ratio": "16:9",
+    "generate_audio": true
+  },
+  "input_schema": {
+    "if": {
+      "required": [
+        "image_urls"
+      ]
+    },
+    "else": {
+      "required": [
+        "video_urls"
+      ]
+    },
+    "type": "object",
+    "required": [],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 4
+      },
+      "audio_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxItems": 3,
+        "minItems": 1
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxItems": 9,
+        "minItems": 1
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxItems": 3,
+        "minItems": 1
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "type": "string",
+        "default": "16:9"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "unpriced"
+}

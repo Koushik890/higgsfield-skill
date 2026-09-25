@@ -1,0 +1,70 @@
+{
+  "id": "kling-video-v2.5-turbo-pro-image-to-video",
+  "name": "Kling 2.5 Turbo Pro",
+  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "category": "image2video",
+  "summary": "Kling 2.5 Turbo Pro converts a single image into a short video clip using a text prompt to guide the animation style. Users can specify video duration, CFG scale for prompt adherence, and provide negative prompts to refine output.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/v2.5-turbo/pro/image-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/v2.5-turbo/pro/image-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "cfg_scale": 0.5,
+    "image_url": "https://example.com/input.jpg",
+    "negative_prompt": ""
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling 2.5 Playground",
+    "required": [
+      "prompt",
+      "image_url"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "enum": [
+          5,
+          10
+        ],
+        "type": "integer",
+        "title": "Duration",
+        "default": 5
+      },
+      "cfg_scale": {
+        "type": "number",
+        "title": "CFG Scale",
+        "default": 0.5,
+        "maximum": 1,
+        "minimum": 0,
+        "multipleOf": 0.01
+      },
+      "image_url": {
+        "type": "string",
+        "title": "Image URL",
+        "format": "uri"
+      },
+      "negative_prompt": {
+        "type": "string",
+        "title": "Negative Prompt",
+        "default": ""
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.193"
+}

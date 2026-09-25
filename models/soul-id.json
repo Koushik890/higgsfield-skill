@@ -1,0 +1,19 @@
+{
+  "id": "soul-id",
+  "name": "Soul ID",
+  "endpoint": "soul-id",
+  "category": "character",
+  "summary": "",
+  "docs": "https://open.higgsfield.ai/models/soul-id/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/soul-id/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {},
+  "input_schema": {
+    "title": "Soul ID"
+  },
+  "price_check": "no-inputs"
+}

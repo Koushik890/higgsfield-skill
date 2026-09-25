@@ -1,0 +1,119 @@
+{
+  "id": "wan-v2.7-reference-to-video",
+  "name": "Wan 2.7",
+  "endpoint": "wan/v2.7/reference-to-video",
+  "category": "image2video",
+  "summary": "Wan 2.7 - Reference to Video. Configured Alibaba route; cloned from wan-27/reference-to-video.",
+  "docs": "https://open.higgsfield.ai/models/wan/v2.7/reference-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/wan/v2.7/reference-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "720p",
+    "aspect_ratio": "16:9",
+    "prompt_extend": false,
+    "negative_prompt": ""
+  },
+  "input_schema": {
+    "if": {
+      "required": [
+        "image_urls"
+      ],
+      "properties": {
+        "image_urls": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    "else": {
+      "required": [
+        "video_urls"
+      ],
+      "properties": {
+        "video_urls": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    "type": "object",
+    "title": "Wan 2.7 References",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "maximum": 2147483646,
+        "minimum": 1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 10,
+        "minimum": 2
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Image",
+          "format": "uri"
+        }
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Video",
+          "format": "uri"
+        }
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "16:9"
+      },
+      "prompt_extend": {
+        "type": "boolean",
+        "default": false
+      },
+      "negative_prompt": {
+        "type": "string",
+        "title": "Negative prompt",
+        "default": ""
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.250"
+}

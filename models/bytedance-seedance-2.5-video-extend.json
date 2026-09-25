@@ -1,0 +1,100 @@
+{
+  "id": "bytedance-seedance-2.5-video-extend",
+  "name": "Seedance 2.5",
+  "endpoint": "bytedance/seedance-2.5/video-extend",
+  "category": "video2video",
+  "summary": "Seedance 2.5 Video Extend generates extended video content from an input video URL and text prompt, supporting up to 30 seconds duration and optional audio or image inputs. It outputs videos in 480p or 720p resolution with mp4 or mov format, allowing control over audio generation and multiple media inputs.",
+  "docs": "https://open.higgsfield.ai/models/bytedance/seedance-2.5/video-extend/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/bytedance/seedance-2.5/video-extend/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "Token-metered pricing. Billable video tokens = ceil((input video seconds + generated video seconds) × output width × output height × 24 fps / 1024). Image and audio references do not count as video input. Video input is required. At 480p or 720p, each 1,000 video tokens cost $0.01284. Both input and generated video durations are billable. Rates shown are before any applicable customer discount.",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "video_url": "https://example.com/input.mp4",
+    "resolution": "720p",
+    "bitrate_mode": "high",
+    "generate_audio": true
+  },
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "prompt",
+      "video_url"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "default": 5,
+        "maximum": 30,
+        "minimum": 4
+      },
+      "video_url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "audio_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxItems": 10,
+        "minItems": 1
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxItems": 30,
+        "minItems": 1
+      },
+      "resolution": {
+        "enum": [
+          "480p",
+          "720p"
+        ],
+        "type": "string",
+        "default": "720p"
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uri"
+        },
+        "maxItems": 10,
+        "minItems": 1
+      },
+      "bitrate_mode": {
+        "enum": [
+          "standard",
+          "high"
+        ],
+        "type": "string",
+        "default": "high"
+      },
+      "generate_audio": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "unpriced"
+}

@@ -1,0 +1,79 @@
+{
+  "id": "kling-video-o3-video-edit",
+  "name": "Kling O3",
+  "endpoint": "kling-video/o3/video-edit",
+  "category": "image2video",
+  "summary": "Kling O3 Video Edit generates edited videos from a single input video URL and optional images or elements, guided by a text prompt. Users can select modes including standard, professional, or 4K to customize output quality.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/o3/video-edit/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/o3/video-edit/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "mode": "pro",
+    "prompt": "A cinematic scene at sunset",
+    "video_urls": [
+      "https://example.com/input.mp4"
+    ]
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling O3 Playground",
+    "required": [
+      "prompt",
+      "video_urls"
+    ],
+    "properties": {
+      "mode": {
+        "enum": [
+          "std",
+          "pro",
+          "4k"
+        ],
+        "type": "string",
+        "default": "pro"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "elements": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 4,
+        "minItems": 0
+      },
+      "image_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Image URL",
+          "format": "uri"
+        },
+        "maxItems": 4,
+        "minItems": 0
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Video URL",
+          "format": "uri"
+        },
+        "maxItems": 1,
+        "minItems": 1
+      }
+    }
+  },
+  "price_check": "estimate-error"
+}

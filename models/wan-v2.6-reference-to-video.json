@@ -1,0 +1,84 @@
+{
+  "id": "wan-v2.6-reference-to-video",
+  "name": "Wan 2.6",
+  "endpoint": "wan/v2.6/reference-to-video",
+  "category": "image2video",
+  "summary": "Wan 2.6 - Reference to Video. Configured Alibaba route; cloned from wan-26/references-to-video.",
+  "docs": "https://open.higgsfield.ai/models/wan/v2.6/reference-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/wan/v2.6/reference-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "resolution": "720p",
+    "video_urls": [
+      "https://example.com/input.mp4"
+    ],
+    "aspect_ratio": "16:9"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Wan 2.6 Playground",
+    "required": [
+      "prompt",
+      "video_urls"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "enum": [
+          5,
+          10
+        ],
+        "type": "integer",
+        "title": "Duration",
+        "default": 5
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "720p"
+      },
+      "video_urls": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Video URL",
+          "format": "uri"
+        },
+        "maxItems": 3,
+        "minItems": 1
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "type": "string",
+        "default": "16:9"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.250"
+}

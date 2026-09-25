@@ -1,0 +1,91 @@
+{
+  "id": "minimax-h3-image-to-video",
+  "name": "MiniMax H3",
+  "endpoint": "minimax/h3/image-to-video",
+  "category": "image2video",
+  "summary": "MiniMax H3 / Hailuo-03 preview integration using Video Generation V2.",
+  "docs": "https://open.higgsfield.ai/models/minimax/h3/image-to-video/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/minimax/h3/image-to-video/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "image_url": "https://example.com/input.jpg",
+    "resolution": "2K",
+    "aspect_ratio": "auto",
+    "aigc_watermark": false
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "MiniMax H3 Image to Video Playground",
+    "required": [
+      "prompt",
+      "image_url"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "minLength": 1,
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "type": "integer",
+        "title": "Duration",
+        "default": 5,
+        "maximum": 15,
+        "minimum": 5
+      },
+      "image_url": {
+        "type": "string",
+        "title": "First frame URL",
+        "format": "uri"
+      },
+      "resolution": {
+        "enum": [
+          "2K"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "2K"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "auto",
+          "adaptive",
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "type": "string",
+        "title": "Aspect ratio",
+        "default": "auto"
+      },
+      "end_image_url": {
+        "type": "string",
+        "title": "Last frame URL",
+        "format": "uri"
+      },
+      "aigc_watermark": {
+        "type": "boolean",
+        "title": "AIGC watermark",
+        "default": false
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "api",
+  "sample_usd": "0.455"
+}

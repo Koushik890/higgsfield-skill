@@ -1,0 +1,90 @@
+{
+  "id": "ideogram-v4.0",
+  "name": "Ideogram 4.0",
+  "endpoint": "ideogram/v4.0",
+  "category": "image_edit, text2image",
+  "summary": "Generates and edits images with multilingual text for posters, packaging and other graphic layouts.",
+  "docs": "https://open.higgsfield.ai/models/ideogram/v4.0/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/ideogram/v4.0/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "prompt": "A cinematic scene at sunset",
+    "aspect_ratio": "1:1",
+    "rendering_speed": "DEFAULT"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Ideogram 4.0 Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "maxLength": 2048,
+        "minLength": 2,
+        "description": "Write your prompt here"
+      },
+      "image_url": {
+        "type": "string",
+        "title": "Input image",
+        "format": "uri"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "1:1",
+          "1:2",
+          "2:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "9:16",
+          "16:9",
+          "5:8",
+          "8:5",
+          "3:4",
+          "4:3",
+          "9:22",
+          "22:9",
+          "9:23",
+          "23:9",
+          "3:8",
+          "8:3",
+          "5:12",
+          "12:5",
+          "1:3",
+          "3:1"
+        ],
+        "type": "string",
+        "title": "Aspect ratio",
+        "default": "1:1"
+      },
+      "image_weight": {
+        "type": "integer",
+        "title": "Image weight",
+        "maximum": 100,
+        "minimum": 1,
+        "description": "How strongly the output should preserve the input image."
+      },
+      "rendering_speed": {
+        "enum": [
+          "TURBO",
+          "DEFAULT",
+          "QUALITY"
+        ],
+        "type": "string",
+        "title": "Rendering speed",
+        "default": "DEFAULT"
+      }
+    },
+    "additionalProperties": false
+  },
+  "price_check": "api",
+  "sample_usd": "0.060"
+}

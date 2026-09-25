@@ -1,0 +1,79 @@
+{
+  "id": "kling-video-omni-first-last-frame",
+  "name": "Kling Omni",
+  "endpoint": "kling-video/omni/first-last-frame",
+  "category": "image2video",
+  "summary": "Generates and edits videos using image or video references and controls for start and end frames.",
+  "docs": "https://open.higgsfield.ai/models/kling-video/omni/first-last-frame/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/kling-video/omni/first-last-frame/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "video",
+    "zip",
+    "mov",
+    "jsx",
+    "fbx",
+    "ply"
+  ],
+  "example": {
+    "mode": "pro",
+    "prompt": "A cinematic scene at sunset",
+    "duration": 5,
+    "aspect_ratio": "16:9",
+    "first_frame_url": "https://example.com/input.jpg"
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Kling Omni Playground",
+    "required": [
+      "prompt",
+      "first_frame_url"
+    ],
+    "properties": {
+      "mode": {
+        "enum": [
+          "std",
+          "pro"
+        ],
+        "type": "string",
+        "default": "pro"
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "duration": {
+        "enum": [
+          5,
+          10
+        ],
+        "type": "integer",
+        "title": "Duration",
+        "default": 5
+      },
+      "aspect_ratio": {
+        "enum": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "type": "string",
+        "default": "16:9"
+      },
+      "last_frame_url": {
+        "type": "string",
+        "title": "Last frame URL",
+        "format": "uri"
+      },
+      "first_frame_url": {
+        "type": "string",
+        "title": "First frame URL",
+        "format": "uri"
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.308"
+}

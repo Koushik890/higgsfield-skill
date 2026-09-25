@@ -1,0 +1,87 @@
+{
+  "id": "higgsfield-ai-soul-v2-standard",
+  "name": "Soul 2",
+  "endpoint": "higgsfield-ai/soul/v2/standard",
+  "category": "text2image",
+  "summary": "Generates realistic portraits and fashion images, with natural textures and curated editorial styles.",
+  "docs": "https://open.higgsfield.ai/models/higgsfield-ai/soul/v2/standard/api-reference",
+  "agent_prompt": "https://dash.higgsfield.ai/models/higgsfield-ai/soul/v2/standard/llms.txt",
+  "checked": "2026-09-26",
+  "pricing_note": "",
+  "outputs": [
+    "images"
+  ],
+  "example": {
+    "seed": null,
+    "prompt": "A cinematic scene at sunset",
+    "batch_size": 1,
+    "resolution": "720p",
+    "aspect_ratio": "4:3",
+    "enhance_prompt": true
+  },
+  "input_schema": {
+    "type": "object",
+    "title": "Soul V2 Playground",
+    "required": [
+      "prompt"
+    ],
+    "properties": {
+      "seed": {
+        "type": "integer",
+        "title": "Seed",
+        "default": null,
+        "maximum": 1000000,
+        "minimum": 1
+      },
+      "prompt": {
+        "type": "string",
+        "title": "Prompt",
+        "description": "Write your prompt here"
+      },
+      "style_id": {
+        "type": "string",
+        "title": "Soul Style",
+        "format": "uuid"
+      },
+      "batch_size": {
+        "enum": [
+          1,
+          4
+        ],
+        "type": "integer",
+        "title": "Result images",
+        "default": 1
+      },
+      "resolution": {
+        "enum": [
+          "720p",
+          "1080p"
+        ],
+        "type": "string",
+        "title": "Resolution",
+        "default": "720p"
+      },
+      "aspect_ratio": {
+        "enum": [
+          "9:16",
+          "16:9",
+          "4:3",
+          "3:4",
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "type": "string",
+        "title": "Aspect Ratio",
+        "default": "4:3"
+      },
+      "enhance_prompt": {
+        "type": "boolean",
+        "title": "Enhance Prompt",
+        "default": true
+      }
+    }
+  },
+  "price_check": "api",
+  "sample_usd": "0.004"
+}
