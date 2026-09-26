@@ -173,7 +173,7 @@ Your own model files in the project's `work/higgsfield/models/` override the bun
 python -m unittest discover -s tests -v
 ```
 
-Tests fake every API call and never spend money. Checked live against the real API on 2026-09-26: key check, uploads (image, video, audio), Marketing Studio presets, and a price estimate for every model. A paid generation with this release has not been run yet.
+Tests fake every API call and never spend money. Checked live against the real API on 2026-09-26: key check, uploads (image, video, audio), Marketing Studio presets, and a price estimate for every model. A real paid generation was also run end to end (Minimax Hailuo 2.3 text-to-video, about $0.07 estimated): submit, wait and download all worked, and the result was a 1366x768 MP4.
 
 ## License
 
