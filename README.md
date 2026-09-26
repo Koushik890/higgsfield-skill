@@ -1,4 +1,4 @@
-# Higgsfield Skill
+# Higgsfield API Skill
 
 Let your coding agent make videos and images with the [Higgsfield API](https://docs.higgsfield.ai/docs). Ask in plain words; the agent picks a model, shows the price, generates, and saves the file into your project's `outputs/` folder.
 
