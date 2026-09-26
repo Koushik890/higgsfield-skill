@@ -16,7 +16,7 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent.parent
 MODELS = ROOT / "models"
-UA = "Mozilla/5.0 (compatible; higgsfield-skill-sync/1.0)"
+UA = "Mozilla/5.0 (compatible; higgsfield-api-skill-sync/1.0)"
 CATALOG = "https://open.higgsfield.ai"
 LLMS = "https://dash.higgsfield.ai/models/{}/llms.txt"
 

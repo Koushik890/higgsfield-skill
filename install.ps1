@@ -1,7 +1,7 @@
 # Install or update the Higgsfield skill for Claude Code (default) or Codex (-Codex).
 param([switch]$Codex)
 $ErrorActionPreference = "Stop"
-$repo = "https://github.com/Koushik890/higgsfield-skill.git"
+$repo = "https://github.com/Koushik890/higgsfield-api-skill.git"
 if ($Codex) {
     $base = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
     $dest = Join-Path $base "skills\higgsfield"

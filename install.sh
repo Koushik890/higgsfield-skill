@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Install or update the Higgsfield skill for Claude Code (default) or Codex (--codex).
 set -e
-REPO="https://github.com/Koushik890/higgsfield-skill.git"
+REPO="https://github.com/Koushik890/higgsfield-api-skill.git"
 if [ "$1" = "--codex" ]; then
   DEST="${CODEX_HOME:-$HOME/.codex}/skills/higgsfield"
 else

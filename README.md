@@ -26,18 +26,18 @@ Works with **Claude Code** and **Codex** (any agent that reads `SKILL.md`).
 **Windows (PowerShell)**
 
 ```powershell
-irm https://raw.githubusercontent.com/Koushik890/higgsfield-skill/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Koushik890/higgsfield-api-skill/main/install.ps1 | iex
 ```
 
 **macOS / Linux**
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Koushik890/higgsfield-skill/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/Koushik890/higgsfield-api-skill/main/install.sh | sh
 ```
 
 For Codex: `sh install.sh --codex`, or run `install.ps1 -Codex`. Running the installer again updates the skill.
 
-Manual: `git clone https://github.com/Koushik890/higgsfield-skill ~/.claude/skills/higgsfield`
+Manual: `git clone https://github.com/Koushik890/higgsfield-api-skill ~/.claude/skills/higgsfield`
 
 ## Add your API key
 

@@ -23,7 +23,7 @@ from uuid import UUID
 
 API = "https://api.higgsfield.ai"
 API_HOST = "api.higgsfield.ai"
-USER_AGENT = "higgsfield-skill/1.0 (+https://github.com/Koushik890/higgsfield-skill)"
+USER_AGENT = "higgsfield-api-skill/1.0 (+https://github.com/Koushik890/higgsfield-api-skill)"
 SKILL_DIR = Path(__file__).resolve().parent.parent
 MODELS_DIR = SKILL_DIR / "models"
 ACTIVE = {"queued", "in_progress"}
