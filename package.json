@@ -1,6 +1,6 @@
 {
   "name": "higgsfield-api-skill",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Install the Higgsfield API skill (79 video and image models) into every coding agent: Claude Code, Codex, Gemini CLI, Copilot, Cursor, Windsurf and more.",
   "type": "module",
   "bin": {
