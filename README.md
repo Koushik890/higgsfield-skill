@@ -27,7 +27,22 @@ Works with **every coding agent that supports skills**: Claude Code, Codex, Gemi
 npx higgsfield-api-skill
 ```
 
-That's it. It finds the coding agents on your computer, lets you pick (all are ticked), installs the skill for each one, and creates your API key file. Any OS; needs [Node.js](https://nodejs.org).
+That's it. It finds the coding agents installed on your computer, lists them, and asks where to install:
+
+```text
+Found 3 coding agents on this computer:
+   1. Claude Code (claude-code)
+   2. Codex (codex)
+   3. Gemini CLI (gemini-cli)
+
+Where should the skill be installed?
+  a  All 3 detected agents (recommended)
+  s  Some of them (pick by number)
+  o  Other agents not listed (full list of 80+)
+  q  Cancel
+```
+
+Then it installs the skill for your choice and creates your API key file. Any OS; needs [Node.js](https://nodejs.org). Agents are detected by their settings folders, so an agent you uninstalled but whose folder is still there may show up too.
 
 | Command | Does |
 |---|---|
