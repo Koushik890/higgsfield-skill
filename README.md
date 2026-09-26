@@ -4,7 +4,7 @@ Let your coding agent make videos and images with the [Higgsfield API](https://d
 
 **79 models** — Seedance, Kling, Wan, Minimax Hailuo, LTX, Grok Imagine, Happy Horse, Higgsfield Soul, Cinema Studio, Genjutsu, Ideogram, Recraft, Qwen Image, Z-Image and Marketing Studio. Full list with example prices: [MODELS.md](MODELS.md).
 
-Works with **Claude Code** and **Codex** (any agent that reads `SKILL.md`).
+Works with **every coding agent that supports skills**: Claude Code, Codex, Gemini CLI, GitHub Copilot, Windsurf, Trae, Cline, Roo Code, Kiro, OpenCode, Goose, Qwen Code and many more. One command installs it for all of them.
 
 > Independent open-source project. Not made by or affiliated with Higgsfield. You pay Higgsfield directly for what you generate.
 
@@ -23,26 +23,36 @@ Works with **Claude Code** and **Codex** (any agent that reads `SKILL.md`).
 
 ## Install
 
-**Windows (PowerShell)**
+One command, any OS (needs [Node.js](https://nodejs.org)):
+
+```sh
+npx skills add Koushik890/higgsfield-api-skill -g
+```
+
+It finds the coding agents on your computer and installs the skill for all of them, listing them first so you can untick any. The files go into one shared folder, `~/.agents/skills/higgsfield`, and each agent gets a link to it.
+
+- Every supported agent, no questions: add `--all`
+- Only some agents: `-a claude-code -a codex -a gemini-cli`
+- Only the current project instead of your whole user: leave out `-g`
+- Update later: `npx skills update higgsfield`
+- Remove: `npx skills remove higgsfield`
+
+This uses the open-source [`skills`](https://github.com/vercel-labs/skills) installer.
+
+**No Node.js?** These scripts install for Claude Code (or Codex with `-Codex` / `--codex`):
 
 ```powershell
 irm https://raw.githubusercontent.com/Koushik890/higgsfield-api-skill/main/install.ps1 | iex
 ```
 
-**macOS / Linux**
-
 ```sh
 curl -fsSL https://raw.githubusercontent.com/Koushik890/higgsfield-api-skill/main/install.sh | sh
 ```
 
-For Codex: `sh install.sh --codex`, or run `install.ps1 -Codex`. Running the installer again updates the skill.
-
-Manual: `git clone https://github.com/Koushik890/higgsfield-api-skill ~/.claude/skills/higgsfield`
-
 ## Add your API key
 
 1. Create a key at [console.higgsfield.ai](https://console.higgsfield.ai).
-2. Open `~/.config/higgsfield/.env` (the installer creates it; on Windows `C:\Users\<you>\.config\higgsfield\.env`) and fill in:
+2. Create the file `~/.config/higgsfield/.env` (on Windows `C:\Users\<you>\.config\higgsfield\.env`) containing:
 
    ```
    HF_API_KEY_ID=your-key-id
@@ -52,10 +62,12 @@ Manual: `git clone https://github.com/Koushik890/higgsfield-api-skill ~/.claude/
 3. Check it (free):
 
    ```sh
-   python ~/.claude/skills/higgsfield/scripts/hf.py check
+   python ~/.agents/skills/higgsfield/scripts/hf.py check
    ```
 
-Environment variables with the same names also work and take priority. Never paste your key into a chat.
+One key file works for every agent. Environment variables with the same names also work and take priority. Never paste your key into a chat.
+
+If you used the script installers, the skill lives in `~/.claude/skills/higgsfield` (or `~/.codex/skills/higgsfield`) instead.
 
 ## Use it
 
