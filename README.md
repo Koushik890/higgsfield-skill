@@ -1,5 +1,9 @@
 # Higgsfield API Skill
 
+[![npm version](https://img.shields.io/npm/v/higgsfield-api-skill?color=cb3837&logo=npm)](https://www.npmjs.com/package/higgsfield-api-skill)
+[![npm downloads](https://img.shields.io/npm/dm/higgsfield-api-skill?color=cb3837)](https://www.npmjs.com/package/higgsfield-api-skill)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 Let your coding agent make videos and images with the [Higgsfield API](https://docs.higgsfield.ai/docs). Ask in plain words; the agent picks a model, shows the price, generates, and saves the file into your project's `outputs/` folder.
 
 **79 models** — Seedance, Kling, Wan, Minimax Hailuo, LTX, Grok Imagine, Happy Horse, Higgsfield Soul, Cinema Studio, Genjutsu, Ideogram, Recraft, Qwen Image, Z-Image and Marketing Studio. Full list with example prices: [MODELS.md](MODELS.md).
