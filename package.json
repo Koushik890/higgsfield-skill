@@ -1,0 +1,36 @@
+{
+  "name": "higgsfield-api-skill",
+  "version": "1.0.0",
+  "description": "Install the Higgsfield API skill (79 video and image models) into every coding agent: Claude Code, Codex, Gemini CLI, Copilot, Cursor, Windsurf and more.",
+  "type": "module",
+  "bin": {
+    "higgsfield-api-skill": "bin/cli.js"
+  },
+  "files": [
+    "bin/"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "skills": "^1.7.0"
+  },
+  "keywords": [
+    "higgsfield",
+    "higgsfield-api",
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "gemini-cli",
+    "ai-video",
+    "seedance",
+    "kling"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Koushik890/higgsfield-api-skill.git"
+  },
+  "homepage": "https://github.com/Koushik890/higgsfield-api-skill#readme",
+  "author": "Koushik Dey",
+  "license": "MIT"
+}

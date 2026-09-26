@@ -6,3 +6,5 @@ outputs/
 __pycache__/
 *.pyc
 *.part
+node_modules/
+*.tgz

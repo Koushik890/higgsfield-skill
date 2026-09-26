@@ -23,21 +23,23 @@ Works with **every coding agent that supports skills**: Claude Code, Codex, Gemi
 
 ## Install
 
-One command, any OS (needs [Node.js](https://nodejs.org)):
-
 ```sh
-npx skills add Koushik890/higgsfield-api-skill -g
+npx higgsfield-api-skill
 ```
 
-It finds the coding agents on your computer and installs the skill for all of them, listing them first so you can untick any. The files go into one shared folder, `~/.agents/skills/higgsfield`, and each agent gets a link to it.
+That's it. It finds the coding agents on your computer, lets you pick (all are ticked), installs the skill for each one, and creates your API key file. Any OS; needs [Node.js](https://nodejs.org).
 
-- Every supported agent, no questions: add `--all`
-- Only some agents: `-a claude-code -a codex -a gemini-cli`
-- Only the current project instead of your whole user: leave out `-g`
-- Update later: `npx skills update higgsfield`
-- Remove: `npx skills remove higgsfield`
+| Command | Does |
+|---|---|
+| `npx higgsfield-api-skill` | Detect agents and install |
+| `npx higgsfield-api-skill --all` | Install for every supported agent, no questions |
+| `npx higgsfield-api-skill -a claude-code -a codex` | Only these agents |
+| `npx higgsfield-api-skill --project` | Only the current project |
+| `npx higgsfield-api-skill update` | Update to the latest version |
+| `npx higgsfield-api-skill remove` | Uninstall from all agents |
+| `npx higgsfield-api-skill key` | Create or check the API key file |
 
-This uses the open-source [`skills`](https://github.com/vercel-labs/skills) installer.
+The skill files live in one shared folder, `~/.agents/skills/higgsfield`, and each agent gets a link to it. Under the hood it uses the open-source [`skills`](https://github.com/vercel-labs/skills) installer, so this also works: `npx skills add Koushik890/higgsfield-api-skill -g`.
 
 **No Node.js?** These scripts install for Claude Code (or Codex with `-Codex` / `--codex`):
 
@@ -52,7 +54,7 @@ curl -fsSL https://raw.githubusercontent.com/Koushik890/higgsfield-api-skill/mai
 ## Add your API key
 
 1. Create a key at [console.higgsfield.ai](https://console.higgsfield.ai).
-2. Create the file `~/.config/higgsfield/.env` (on Windows `C:\Users\<you>\.config\higgsfield\.env`) containing:
+2. Open `~/.config/higgsfield/.env` (the installer creates it; on Windows `C:\Users\<you>\.config\higgsfield\.env`) and fill in:
 
    ```
    HF_API_KEY_ID=your-key-id
